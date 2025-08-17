@@ -10,6 +10,7 @@ import FeaturedPosts from './components/FeaturedPosts/FeaturedPosts';
 import Footer from './components/Footer/Footer';
 import ShopPage from './pages/ShopPage';
 import ProductDetail from './pages/ProductDetail';
+import ContactPage from './pages/ContactPage';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           } />
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/contact" element={<ContactPage />} />
         </Routes>
       </main>
       <Footer />
