@@ -9,6 +9,7 @@ import CallToAction from './components/C2A/CallToAction';
 import FeaturedPosts from './components/FeaturedPosts/FeaturedPosts';
 import Footer from './components/Footer/Footer';
 import ShopPage from './pages/ShopPage';
+import ProductDetail from './pages/ProductDetail';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             </>
           } />
           <Route path="/shop" element={<ShopPage />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
         </Routes>
       </main>
       <Footer />

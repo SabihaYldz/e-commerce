@@ -1,6 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ProductCategoryList = () => {
+  const navigate = useNavigate();
+  
   const categories = [
     { id: 1, image: 'morşort.png', alt: 'Mor Şort' },
     { id: 2, image: 'omzundaceket.png', alt: 'Omuz Ceket' },
@@ -11,6 +14,10 @@ const ProductCategoryList = () => {
     { id: 7, image: 'sweat.png', alt: 'Sweat' },
     { id: 8, image: 'zenciçocuk.png', alt: 'Çocuk Giyim' },
   ];
+
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
 
   return (
     <div className="w-full max-w-[1200px] mx-auto px-5 py-10">
@@ -34,7 +41,14 @@ const ProductCategoryList = () => {
       {/* Categories Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 justify-center">
         {categories.map((category) => (
-          <div key={category.id} className="w-[239px] flex flex-col mx-auto">
+          <div 
+            key={category.id} 
+            className="w-[239px] flex flex-col mx-auto cursor-pointer hover:opacity-90 transition-opacity"
+            onClick={() => handleProductClick(category.id)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && handleProductClick(category.id)}
+          >
             <div className="w-full overflow-hidden">
               <img 
                 src={`/images/${category.image}`} 
