@@ -39,15 +39,14 @@ const Header = () => {
   };
 
   return (
-    <header className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'}`}>
+    <header className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2' : 'bg-white py-4'}`}>
       <div className="container mx-auto px-4">
         {/* Üst Menü */}
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <div className="flex items-center
-          ">
+          <div className="flex items-center">
             <Link to="/" className="text-2xl font-bold text-gray-800">
-              E-Commerce
+              SYRA
             </Link>
           </div>
 
@@ -76,6 +75,14 @@ const Header = () => {
               }
             >
               İletişim
+            </NavLink>
+            <NavLink 
+              to="/team" 
+              className={({ isActive }) => 
+                `px-3 py-2 text-sm font-medium ${isActive ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'}`
+              }
+            >
+              Ekibimiz
             </NavLink>
           </nav>
 
@@ -159,6 +166,13 @@ const Header = () => {
               className={`block px-4 py-3 text-sm font-medium ${location.pathname === '/contact' ? 'text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
             >
               İletişim
+            </NavLink>
+            <NavLink 
+              to="/team" 
+              onClick={closeMobileMenu}
+              className={`block px-4 py-3 text-sm font-medium ${location.pathname === '/team' ? 'text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+            >
+              Ekibimiz
             </NavLink>
             <div className="border-t border-gray-200 my-2"></div>
             <Link 
