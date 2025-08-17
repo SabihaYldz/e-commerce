@@ -1,22 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { FaSearch, FaUser, FaShoppingCart, FaBars, FaTimes, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaSearch, FaUser, FaShoppingCart, FaBars, FaTimes } from 'react-icons/fa';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const location = useLocation();
 
   // Scroll durumunu izle
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -26,11 +21,6 @@ const Header = () => {
   // Mobil menüyü kapat
   const closeMobileMenu = () => {
     setIsMenuOpen(false);
-  };
-
-  // Dropdown menüyü aç/kapat
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
   };
 
   // Arama kutusunu aç/kapat
@@ -51,7 +41,7 @@ const Header = () => {
           </div>
 
           {/* Masaüstü Navigasyon */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-4">
             <NavLink 
               to="/" 
               className={({ isActive }) => 
@@ -69,12 +59,12 @@ const Header = () => {
               Ürünler
             </NavLink>
             <NavLink 
-              to="/contact" 
+              to="/about" 
               className={({ isActive }) => 
                 `px-3 py-2 text-sm font-medium ${isActive ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'}`
               }
             >
-              İletişim
+              Hakkımızda
             </NavLink>
             <NavLink 
               to="/team" 
@@ -83,6 +73,14 @@ const Header = () => {
               }
             >
               Ekibimiz
+            </NavLink>
+            <NavLink 
+              to="/contact" 
+              className={({ isActive }) => 
+                `px-3 py-2 text-sm font-medium ${isActive ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'}`
+              }
+            >
+              İletişim
             </NavLink>
           </nav>
 
@@ -161,11 +159,11 @@ const Header = () => {
               Ürünler
             </NavLink>
             <NavLink 
-              to="/contact" 
+              to="/about" 
               onClick={closeMobileMenu}
-              className={`block px-4 py-3 text-sm font-medium ${location.pathname === '/contact' ? 'text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+              className={`block px-4 py-3 text-sm font-medium ${location.pathname === '/about' ? 'text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
             >
-              İletişim
+              Hakkımızda
             </NavLink>
             <NavLink 
               to="/team" 
@@ -173,6 +171,13 @@ const Header = () => {
               className={`block px-4 py-3 text-sm font-medium ${location.pathname === '/team' ? 'text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
             >
               Ekibimiz
+            </NavLink>
+            <NavLink 
+              to="/contact" 
+              onClick={closeMobileMenu}
+              className={`block px-4 py-3 text-sm font-medium ${location.pathname === '/contact' ? 'text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+            >
+              İletişim
             </NavLink>
             <div className="border-t border-gray-200 my-2"></div>
             <Link 

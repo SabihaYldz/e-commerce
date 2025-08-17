@@ -12,6 +12,9 @@ import ShopPage from './pages/ShopPage';
 import ProductDetail from './pages/ProductDetail';
 import ContactPage from './pages/ContactPage';
 import TeamPage from './pages/TeamPage';
+import AboutPage from './pages/AboutPage';
+
+
 
 function App() {
   return (
@@ -33,6 +36,7 @@ function App() {
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/team" element={<TeamPage />} />
+          <Route path="/about" element={<AboutPage />} />
         </Routes>
       </main>
       <Footer />
