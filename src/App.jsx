@@ -13,7 +13,8 @@ import ProductDetail from './pages/ProductDetail';
 import ContactPage from './pages/ContactPage';
 import TeamPage from './pages/TeamPage';
 import AboutPage from './pages/AboutPage';
-
+import SignupPage from './pages/SignupPage';
+import LoginPage from './pages/LoginPage';
 
 
 function App() {
@@ -37,6 +38,8 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/team" element={<TeamPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
       </main>
       <Footer />

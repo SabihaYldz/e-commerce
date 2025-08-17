@@ -86,6 +86,18 @@ const Header = () => {
 
           {/* Sağ Üst Menü */}
           <div className="flex items-center space-x-4">
+            <Link
+              to="/login"
+              className="hidden sm:inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+            >
+              Giriş Yap
+            </Link>
+            <Link
+              to="/signup"
+              className="hidden sm:inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+            >
+              Kayıt Ol
+            </Link>
             <button 
               onClick={toggleSearch}
               className="p-2 text-gray-600 hover:text-blue-600 focus:outline-none"
@@ -181,12 +193,18 @@ const Header = () => {
             </NavLink>
             <div className="border-t border-gray-200 my-2"></div>
             <Link 
-              to="/account" 
+              to="/login" 
               onClick={closeMobileMenu}
-              className="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100"
+              className="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100"
             >
-              <FaUser className="h-4 w-4 mr-2" />
-              Hesabım
+              Giriş Yap
+            </Link>
+            <Link 
+              to="/signup" 
+              onClick={closeMobileMenu}
+              className="block px-4 py-3 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+            >
+              Kayıt Ol
             </Link>
           </div>
         </div>
