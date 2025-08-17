@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FaPhoneAlt, FaEnvelope, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaSearch, FaUser, FaHeart, FaShoppingCart, FaChevronDown, FaBars, FaTimes } from 'react-icons/fa';
 
-const Header = ({ location }) => {
+const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isShopOpen, setIsShopOpen] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleShop = () => setIsShopOpen(!isShopOpen);
@@ -145,12 +146,55 @@ const Header = ({ location }) => {
           {/* Mobile Menu */}
           {isMenuOpen && (
             <div className="md:hidden mt-4 pb-4">
-              <div className="flex flex-col space-y-4">
-                <Link to="/" className="py-2 text-lg font-medium" onClick={() => setIsMenuOpen(false)}>Home</Link>
-                <Link to="/product" className="py-2 text-lg font-medium" onClick={() => setIsMenuOpen(false)}>Product</Link>
-                <Link to="/pricing" className="py-2 text-lg font-medium" onClick={() => setIsMenuOpen(false)}>Pricing</Link>
-                <Link to="/contact" className="py-2 text-lg font-medium" onClick={() => setIsMenuOpen(false)}>Contact</Link>
-              </div>
+              {navItems.map((item, index) => (
+                <div key={index}>
+                  {item.submenu ? (
+                    <div>
+                      <div 
+                        className="py-2 text-lg font-medium flex justify-between items-center"
+                        onClick={toggleShop}
+                      >
+                        <span>{item.name}</span>
+                        <FaChevronDown className={`transition-transform ${isShopOpen ? 'transform rotate-180' : ''}`} />
+                      </div>
+                      {isShopOpen && (
+                        <div className="pl-4">
+                          <div className="font-medium text-gray-700 py-1">Kadın</div>
+                          {item.submenu.women.map((subItem, i) => (
+                            <Link 
+                              key={`mobile-women-${i}`}
+                              to={`/shop/women/${subItem.toLowerCase()}`}
+                              className="block py-1 text-gray-600 pl-2"
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              {subItem}
+                            </Link>
+                          ))}
+                          <div className="font-medium text-gray-700 py-1 mt-2">Erkek</div>
+                          {item.submenu.men.map((subItem, i) => (
+                            <Link 
+                              key={`mobile-men-${i}`}
+                              to={`/shop/men/${subItem.toLowerCase()}`}
+                              className="block py-1 text-gray-600 pl-2"
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              {subItem}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Link 
+                      to={item.path} 
+                      className="block py-2 text-lg font-medium"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  )}
+                </div>
+              ))}
               <div className="mt-6 pt-6 border-t">
                 <Link to="/login" className="flex items-center space-x-4 mb-4 text-[#23A6F0]" onClick={() => setIsMenuOpen(false)}>
                   <FaUser />
@@ -169,4 +213,4 @@ const Header = ({ location }) => {
   );
 };
 
-export default withRouter(Header);
+export default Header;
