@@ -1,14 +1,27 @@
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import { thunk } from 'redux-thunk';
-
-// Example placeholder reducer (can be replaced with real reducers later)
-const placeholder = (state = { ready: true }, _action) => state;
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';  // Bu satırı değiştirdik
+import { createLogger } from 'redux-logger';
+import clientReducer from './reducers/clientReducer';
+import productReducer from './reducers/productReducer';
+import shoppingCartReducer from './reducers/shoppingCartReducer';
 
 const rootReducer = combineReducers({
-  app: placeholder,
+  client: clientReducer,
+  product: productReducer,
+  shoppingCart: shoppingCartReducer,
 });
 
-// Redux DevTools support
-const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
+const middleware = [thunk];
+
+if (process.env.NODE_ENV === 'development') {
+  middleware.push(createLogger());
+}
+
+const store = createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(...middleware))
+);
+
+export default store;

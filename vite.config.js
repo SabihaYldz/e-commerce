@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 import path from 'path';
 
 export default defineConfig({
@@ -10,11 +10,11 @@ export default defineConfig({
     strictPort: true,
     open: true,
     hmr: {
-      port: 3001,
+      port: 3000,
       overlay: false
     },
     headers: {
-      "Content-Security-Policy": "script-src 'self' 'unsafe-eval' 'unsafe-inline' localhost:*;"
+      "Content-Security-Policy": "connect-src 'self' ws: localhost:*; script-src 'self' 'unsafe-eval' 'unsafe-inline' localhost:*;"
     }
   },
   resolve: {
@@ -22,6 +22,9 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src')
     }
+  },
+  optimizeDeps: {
+    include: ['redux-thunk']
   },
   build: {
     target: 'esnext',
@@ -32,11 +35,10 @@ export default defineConfig({
         manualChunks: undefined,
       },
     },
-    // Add this for Turkish characters in filenames
     chunkFileNames: 'assets/[name]-[hash].js',
     assetFileNames: 'assets/[name]-[hash][extname]',
   },
   define: {
     'process.env': {}
   }
-})
+});

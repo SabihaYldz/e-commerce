@@ -1,3 +1,4 @@
+console.log('App bileşeni yüklendi');
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
@@ -15,7 +16,6 @@ import TeamPage from './pages/TeamPage';
 import AboutPage from './pages/AboutPage';
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
-
 
 function App() {
   return (
@@ -40,6 +40,8 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/login" element={<LoginPage />} />
+          {/* 404 sayfası için */}
+          <Route path="*" element={<div>Sayfa bulunamadı</div>} />
         </Routes>
       </main>
       <Footer />
