@@ -4,6 +4,9 @@ const SET_ROLES = 'client/setRoles';
 const SET_THEME = 'client/setTheme';
 const SET_LANGUAGE = 'client/setLanguage';
 const SET_FETCH_STATE = 'client/setFetchState';
+const LOGIN_REQUEST = 'client/loginRequest';
+const LOGIN_SUCCESS = 'client/loginSuccess';
+const LOGIN_FAILURE = 'client/loginFailure';
 
 // Initial State
 const initialState = {
@@ -13,12 +16,29 @@ const initialState = {
   roles: [],
   theme: 'light',
   language: 'tr',
-  fetchState: null
+  fetchState: null,
+  loading: false,
+  error: null
 };
 
 // Reducer
 const clientReducer = (state = initialState, action) => {
   switch (action.type) {
+    case LOGIN_REQUEST:
+      return { ...state, loading: true, error: null };
+    case LOGIN_SUCCESS:
+      return { 
+        ...state, 
+        loading: false, 
+        user: action.payload, 
+        error: null 
+      };
+    case LOGIN_FAILURE:
+      return { 
+        ...state, 
+        loading: false, 
+        error: action.payload 
+      };
     case SET_USER:
       return { ...state, user: action.payload };
     case SET_ROLES:
@@ -40,44 +60,36 @@ export const setUser = (user) => ({
   payload: user
 });
 
-export const setRoles = (roles) => ({
-  type: SET_ROLES,
-  payload: roles
+export const loginRequest = () => ({
+  type: LOGIN_REQUEST
 });
 
-export const setTheme = (theme) => ({
-  type: SET_THEME,
-  payload: theme
+export const loginSuccess = (user) => ({
+  type: LOGIN_SUCCESS,
+  payload: user
 });
 
-export const setLanguage = (language) => ({
-  type: SET_LANGUAGE,
-  payload: language
+export const loginFailure = (error) => ({
+  type: LOGIN_FAILURE,
+  payload: error
 });
 
-export const setFetchState = (fetchState) => ({
-  type: SET_FETCH_STATE,
-  payload: fetchState
-});
-
-// Thunk Action Creator
-export const fetchRoles = () => {
-  return async (dispatch, getState) => {
-    const { roles } = getState().client;
-    if (roles && roles.length > 0) {
-      return;
+// Thunk Action
+export const loginUser = (email, password, rememberMe) => async (dispatch) => {
+  dispatch(loginRequest());
+  try {
+    const response = await login(email, password);
+    
+    if (rememberMe) {
+      localStorage.setItem('token', response.token);
     }
 
-    try {
-      dispatch(setFetchState('FETCHING'));
-      const rolesData = await apiService.getRoles();
-      dispatch(setRoles(rolesData));
-      dispatch(setFetchState('FETCHED'));
-    } catch (error) {
-      console.error('Roller yüklenirken hata oluştu:', error);
-      dispatch(setFetchState('FAILED'));
-    }
-  };
+    dispatch(loginSuccess(response.user));
+    return response;
+  } catch (error) {
+    dispatch(loginFailure(error.message));
+    throw error;
+  }
 };
 
 export default clientReducer;
