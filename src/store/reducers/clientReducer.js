@@ -1,5 +1,6 @@
 // Action Types
 const SET_USER = 'client/setUser';
+const CLEAR_USER = 'client/clearUser';
 const SET_ROLES = 'client/setRoles';
 const SET_THEME = 'client/setTheme';
 const SET_LANGUAGE = 'client/setLanguage';
@@ -41,6 +42,8 @@ const clientReducer = (state = initialState, action) => {
       };
     case SET_USER:
       return { ...state, user: action.payload };
+    case CLEAR_USER:
+      return { ...state, user: null };
     case SET_ROLES:
       return { ...state, roles: action.payload };
     case SET_THEME:
@@ -60,6 +63,10 @@ export const setUser = (user) => ({
   payload: user
 });
 
+export const clearUser = () => ({
+  type: CLEAR_USER
+});
+
 export const loginRequest = () => ({
   type: LOGIN_REQUEST
 });
@@ -75,15 +82,12 @@ export const loginFailure = (error) => ({
 });
 
 // Thunk Action
-export const loginUser = (email, password, rememberMe) => async (dispatch) => {
+export const loginUser = (email, password, rememberMe = false) => async (dispatch) => {
   dispatch(loginRequest());
   try {
-    const response = await login(email, password);
+    const response = await login(email, password, rememberMe);
     
-    if (rememberMe) {
-      localStorage.setItem('token', response.token);
-    }
-
+    // Token işlemleri artık login fonksiyonu içinde yapılıyor
     dispatch(loginSuccess(response.user));
     return response;
   } catch (error) {

@@ -33,9 +33,8 @@ const mockUsers = [
   ];
   
   // Login fonksiyonu
-  export const login = async (email, password) => {
+  export const login = async (email, password, rememberMe = false) => {
     return new Promise((resolve, reject) => {
-      // 1 saniyelik gecikme ekleyelim
       setTimeout(() => {
         const user = mockUsers.find(
           u => u.email === email && 
@@ -43,53 +42,96 @@ const mockUsers = [
         );
         
         if (user) {
-          // Başarılı giriş
+          const token = `mock-jwt-token-${user.user.id}`;
+          
+          // Eğer "Beni Hatırla" seçiliyse token'ı localStorage'a kaydet
+          if (rememberMe) {
+            localStorage.setItem('token', token);
+            setAuthToken(token);
+          }
+          
           resolve({
-            token: `mock-jwt-token-${user.user.id}`,
+            token: token,
             user: user.user
           });
         } else {
-          // Hatalı giriş
           reject(new Error('Geçersiz email veya şifre'));
         }
       }, 1000);
     });
   };
   
+  // Token doğrulama fonksiyonu
   export const checkAuth = async () => {
-    return new Promise((resolve) => {
-      const token = getAuthToken();
-      if (!token) {
-        resolve({ user: null });
-        return;
-      }
-
-      // Token varsa, mock kullanıcıyı bulalım
-      const userId = parseInt(token.replace('mock-jwt-token-', ''));
-      const user = mockUsers.find(u => u.user.id === userId)?.user;
-      
-      if (user) {
-        resolve({ user });
+    const token = getAuthToken();
+    
+    if (!token) {
+      return { isAuthenticated: false, user: null };
+    }
+    
+    // Token varsa doğrulama yap
+    try {
+      // Burada gerçek bir API isteği yapılacakmış gibi simüle ediyoruz
+      const response = await new Promise((resolve) => {
+        setTimeout(() => {
+          const tokenParts = token.split('-');
+          const userId = tokenParts[tokenParts.length - 1];
+          const user = mockUsers.find(u => u.user.id.toString() === userId)?.user;
+          
+          if (user) {
+            resolve({ 
+              user,
+              token: `mock-jwt-token-${user.id}` // Token'ı yenile
+            });
+          } else {
+            resolve(null);
+          }
+        }, 500);
+      });
+  
+      if (response) {
+        // Token geçerli, kullanıcı bilgilerini döndür
+        setAuthToken(response.token);
+        return { isAuthenticated: true, user: response.user };
       } else {
-        // Geçersiz token
-        setAuthToken(null);
-        resolve({ user: null });
+        // Token geçersiz, temizle
+        removeAuthToken();
+        return { isAuthenticated: false, user: null };
       }
-    });
-  };
-
-  export const setAuthToken = (token) => {
-    if (token) {
-      localStorage.setItem('token', token);
-    } else {
-      localStorage.removeItem('token');
+    } catch (error) {
+      console.error('Auth check failed:', error);
+      removeAuthToken();
+      return { isAuthenticated: false, user: null };
     }
   };
   
+  // Axios header'ına token ekleme
+  export const setAuthToken = (token) => {
+    if (token) {
+      // Bearer öneki olmadan token'ı header'a ekle
+      axios.defaults.headers.common['Authorization'] = token;
+    } else {
+      delete axios.defaults.headers.common['Authorization'];
+    }
+  };
+  
+  // LocalStorage'dan token'ı getir
   export const getAuthToken = () => {
     return localStorage.getItem('token');
   };
   
+  // LocalStorage'dan token'ı kaldır
+  export const removeAuthToken = () => {
+    localStorage.removeItem('token');
+    setAuthToken(null);
+  };
+  
+  // Kullanıcının giriş yapıp yapmadığını kontrol et
   export const isAuthenticated = () => {
     return !!getAuthToken();
+  };
+  
+  // Çıkış işlemi
+  export const logout = () => {
+    removeAuthToken();
   };
