@@ -78,11 +78,13 @@ function App() {
         } />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/shop" element={<ShopPage />} />
+        <Route path="/urunler" element={<ShopPage />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/" replace />} />
         <Route path="/signup" element={!user ? <SignupPage /> : <Navigate to="/" replace />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/team" element={<TeamPage />} />
+        <Route path="/shop/:gender?/:categoryName?/:categoryId?" element={<ShopPage />} />
         
         {/* Protected Routes */}
         <Route 

@@ -88,31 +88,19 @@ export const setFilter = (filter) => ({
 });
 
 // Thunk Action Creators
-export const fetchProducts = (params = {}) => {
-  return async (dispatch, getState) => {
-    const { limit, offset, filter } = getState().product;
-    
-    try {
-      dispatch(setFetchState('FETCHING'));
-      
-      // Burada örnek ürünler dönebiliriz veya boş bırakabiliriz
-      const sampleProducts = [];
-      
-      dispatch(setProductList(sampleProducts));
-      dispatch(setTotal(sampleProducts.length));
-      
-      if (params.limit !== undefined) dispatch(setLimit(params.limit));
-      if (params.offset !== undefined) dispatch(setOffset(params.offset));
-      if (params.filter !== undefined) dispatch(setFilter(params.filter));
-      
-      dispatch(setFetchState('FETCHED'));
-    } catch (error) {
-      console.error('Ürünler yüklenirken hata oluştu:', error);
-      dispatch(setFetchState('FAILED'));
-    }
-  };
+// productReducer.js içindeki fetchProducts'ı güncelleyeceğiz
+export const fetchProducts = (params = {}) => async (dispatch) => {
+  try {
+    dispatch(setFetchState('LOADING'));
+    const response = await apiService.getProducts(params);
+    dispatch(setProductList(response.products || []));
+    dispatch(setTotal(response.total || 0));
+    dispatch(setFetchState('FETCHED'));
+  } catch (error) {
+    console.error('Ürünler yüklenirken hata:', error);
+    dispatch(setFetchState('ERROR'));
+  }
 };
-
 // Kategoriler için artık API çağrısı yapmıyoruz, doğrudan örnek verileri dönüyoruz
 export const fetchCategories = () => {
   return (dispatch) => {

@@ -22,14 +22,17 @@ const getRoles = async () => {
 };
 
 // Ürünleri getirme
+// apiService.js'de getProducts fonksiyonunu güncelle
 const getProducts = async (params = {}) => {
   try {
-    const { limit = 25, offset = 0, filter = '' } = params;
+    const { limit = 25, offset = 0, filter = '', sort = '', category = '' } = params;
     const response = await api.get('/products', {
       params: {
         limit,
         offset,
-        filter,
+        ...(filter && { filter }),
+        ...(sort && { sort }),
+        ...(category && { category })
       },
     });
     return response.data;
@@ -38,7 +41,6 @@ const getProducts = async (params = {}) => {
     throw error;
   }
 };
-
 // Kategorileri getirme
 const getCategories = async () => {
   try {
