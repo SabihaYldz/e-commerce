@@ -50,10 +50,50 @@ const getCategories = async () => {
   }
 };
 
+// Kullanıcı girişi
+const login = async (email, password) => {
+  try {
+    const response = await api.post('/auth/login', { email, password });
+    return response.data;
+  } catch (error) {
+    console.error('Giriş yapılırken hata oluştu:', error);
+    throw error;
+  }
+};
+
+// Kullanıcı kaydı
+const register = async (userData) => {
+  try {
+    const response = await api.post('/auth/register', userData);
+    return response.data;
+  } catch (error) {
+    console.error('Kayıt olunurken hata oluştu:', error);
+    throw error;
+  }
+};
+
+// Kullanıcı bilgilerini güncelleme
+const updateProfile = async (userData, token) => {
+  try {
+    const response = await api.put('/users/profile', userData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Profil güncellenirken hata oluştu:', error);
+    throw error;
+  }
+};
+
 export const apiService = {
   getRoles,
   getProducts,
   getCategories,
+  login,
+  register,
+  updateProfile,
 };
 
 export default apiService;
